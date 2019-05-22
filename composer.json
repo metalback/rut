@@ -1,7 +1,7 @@
 {
     "name": "metalback/rut",
     "description": "Helper of Chilean RUT",
-    "license":"GPL",
+    "license":"MIT",
     "require": {
         "php": ">=7.0"
     },

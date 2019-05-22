@@ -8,7 +8,7 @@ namespace metalback\Rut;
  *
  * @author Mauricio Beltran <mgbeltranb@gmail.com>
  * @version 1.0.0
- * @license GPL
+ * @license MIT
  */
 class Rut
 {
