@@ -1,0 +1,17 @@
+{
+    "name": "metalback/rut",
+    "description": "Helper of Chilean RUT",
+    "license":"GPL",
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "metalback\\Rut\\": "lib/",
+            "Test\\": "test/"
+        }
+    }
+}

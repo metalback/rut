@@ -1,0 +1,14 @@
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         verbose="true"
+>
+  <testsuites>
+    <testsuite name="MBCL\\Rut test suite">
+      <directory>test</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
