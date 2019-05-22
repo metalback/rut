@@ -1,30 +1,37 @@
 <?php
+/**
+ * Rut is a helper which manage action on and for Chilean Rut
+ */
 namespace metalback\Rut;
 /**
- * 
+ * Rut is a helper which manage action on and for Chilean Rut
+ *
+ * @author Mauricio Beltran <mgbeltranb@gmail.com>
+ * @version 1.0.0
+ * @license GPL
  */
 class Rut
 {
      /**
-     * Valida que un rut dado sea valido
+     * Check if a given Rut is valid
      * <code>
-     * $rut_valido = \Core\Rut::validar('12.312.312-3');
-     * if ($rut_valido) {
-     *     echo "valido";
+     * $valid_rut = \Core\Rut::validate('12.312.312-3');
+     * if ($valid_rut) {
+     *     echo "valid";
      * } else {
-     *     echo "no valido";
+     *     echo "not valid";
      * }
      * </code>
-     * @param  string $rut rut a validar
-     * @return boolean      true en caso de que sea valido, false en caso contrario
+     * @param  string $rut chilean rut
+     * @return boolean      true if it is valid, false instead
      */
-    public static function validar($rut)
+    public static function validate($rut)
     {
-        $rut = self::limpiar($rut);
-        $numero=self::numero($rut);
-        $digito=self::digitoVerificador($rut);
-        $dv = self::calcularDigitoVerificador($numero);
-        if (strtoupper($dv) == strtoupper($digito)){
+        $rut = self::clean($rut);
+        $number=self::number($rut);
+        $digit=self::VerificationDigit($rut);
+        $dv = self::getVerificationDigit($number);
+        if (strtoupper($dv) == strtoupper($digit)){
             return true;
         } else {
             return false;
@@ -32,65 +39,65 @@ class Rut
     }
 
     /**
-     * Obtiene el numero base de un rut completo
+     * Get base number of a given full rut
      * <code>
-     * $rut_base = \Core\Rut::numero('12.312.312-3');
-     * echo $rut_base; //Obtendras 12312312
+     * $rut_base = \Core\Rut::number('12.312.312-3');
+     * echo $rut_base; //will get 12312312
      * </code>
-     * @param  string $rut Rut del tipo 12.312.123-3 o 12312312-3 o 123123123
-     * @return integer      numero base del rut
+     * @param  string $rut Rut of type 12.312.123-3 or 12312312-3 or 123123123
+     * @return integer      base number of a given Rut
      */
-    public static function numero($rut)
+    public static function number($rut)
     {
-        $rut = self::limpiar($rut);
+        $rut = self::clean($rut);
         return substr($rut,0,strlen($rut)-1);
     }
 
     /**
-     * Obtiene el digito verificador dado un rut completo
+     * Get the verification digit of a given full rut
      * <code>
-     * $rut_digv = \Core\Rut::digitoVerificador('12.312.312-3');
-     * echo $rut_digv; //Obtendras 3
+     * $rut_digv = \Core\Rut::VerificationDigit('12.312.312-3');
+     * echo $rut_digv; // you will get 3
      * </code>
-     * @param  string $rut rut del tipo 12.312.312-3
-     * @return integer     digito verificador
+     * @param  string $rut rut of 12.312.312-3
+     * @return integer     verification digit
      */
-    public static function digitoVerificador($rut)
+    public static function VerificationDigit($rut)
     {
-        $rut = self::limpiar($rut);
+        $rut = self::clean($rut);
         return substr($rut,-1);
     }
 
     /**
-     * Limpia un Rut y lo dejo sin puntos ni guiones
+     * Clean a Rut and let it without any special chars
      * <code>
-     * $limpiar = \Core\Rut::limpiar('12.312.312-3');
-     * echo $limpiar; //Obtendras 123123123
+     * $clean = \Core\Rut::clean('12.312.312-3');
+     * echo $clean; //you will get 123123123
      * </code>
-     * @param  string $rut rut del tipo 12.312.312-3
+     * @param  string $rut rut of type 12.312.312-3
      * @return string      123123123
      */
-    public static function limpiar($rut)
+    public static function clean($rut)
     {
         $rut = trim($rut);
-        $patron  = array('.', ',', '-');
-        $reemplazo = array('');
-        $rut=str_replace($patron,$reemplazo,$rut);
+        $pattern  = array('.', ',', '-');
+        $replace = array('');
+        $rut=str_replace($pattern, $replace, $rut);
         return $rut;
     }
 
     /**
-     * Calcula el digito verificador dado un rut
+     * Calculates the verification digit of a given Rut
      * <code>
-     * $rut_con_dv = \Core\Rut::calcularDigitoVerificador(12312312);
-     * echo $rut_con_dv; //Obtendras 123123123
+     * $rut_con_dv = \Core\Rut::getVerificationDigit(12312312);
+     * echo $rut_con_dv; //You will get 123123123
      * </code>
-     * @param  integer $rut_sin_dv rut sin digito verificador a obtener
-     * @return integer             rut con digito verificador incluido
+     * @param  integer $rut_without_dv rut without verification digit
+     * @return integer             rut with verification digit
      */
-    public static function calcularDigitoVerificador($rut_sin_dv)
+    public static function getVerificationDigit($rut_without_dv)
     {
-        $sub_rut = (string)$rut_sin_dv;
+        $sub_rut = (string) $rut_without_dv;
         $x=2;
         $s=0;
         for ($i=strlen($sub_rut)-1;$i>=0;$i--) {
@@ -111,27 +118,27 @@ class Rut
     }
 
     /**
-     * generar un numero de rut a partir de una base
+     * generate un number de rut a partir de una base
      * <code>
-     * $rut = \Core\Rut::generar();
-     * echo $rut; //Obtendras 12.312.312-3 o cualquier otro rut valido de la forma
-     * $rut = \Core\Rut::generar('', 2);
-     * print_r($rut);//Obtendras  array => ( [0] => 12.312.312-3, [1] => 11.111.111-1 )
+     * $rut = \Core\Rut::generate();
+     * echo $rut; //You will get 12.312.312-3 o cualquier otro rut valido de la forma
+     * $rut = \Core\Rut::generate('', 2);
+     * print_r($rut);//You will get  array => ( [0] => 12.312.312-3, [1] => 11.111.111-1 )
      * </code>
-     * @param  string  $base    numero base de generacion
-     * @param  integer $cuantos cuantos numeros va a generar
+     * @param  string  $base    number base de generacion
+     * @param  integer $cuantos cuantos numbers va a generate
      * @return array            arreglo de rut generados
      */
-    public static function generar($base='',$cuantos=1)
+    public static function generate($base='',$cuantos=1)
     {
         $gen = array();
         if ($base == '' || !is_numeric($base)) {
             $base = mt_rand();
         }
         while($cuantos){
-            $numero = $base++;
-            $digito = self::calcularDigitoVerificador($numero);
-            $gen[] = self::formatear(''.$numero.$digito);
+            $number = $base++;
+            $digito = self::getVerificationDigit($number);
+            $gen[] = self::format(''.$number.$digito);
             $cuantos--;
         }
         return $gen;
@@ -140,15 +147,15 @@ class Rut
     /**
      * Formatea un rut con la nomenclatura chilena
      * <code>
-     * $rut_con_dv = \Core\Rut::formatear(12312312-3);
-     * echo $rut_con_dv; //Obtendras 12.312.312-3
+     * $rut_con_dv = \Core\Rut::format(12312312-3);
+     * echo $rut_con_dv; //You will get 12.312.312-3
      * </code>
-     * @param  integer $rut rut completo a formatear
+     * @param  integer $rut rut completo a format
      * @return string      rut formateado
      */
-    public static function formatear($rut)
+    public static function format($rut)
     {
-        $rut = self::limpiar($rut);
+        $rut = self::clean($rut);
         $sub_rut=substr($rut,0,strlen($rut)-1);
         $sub_dv=substr($rut,-1);
         $rut = number_format($sub_rut,0,',','.') . '-' . $sub_dv;
@@ -157,19 +164,19 @@ class Rut
     
     /**
      * Formatea un rut con la nomenclatura chilena
-     * sin contar con el dígito verificador
+     * without contar con el dígito verificador
      * <code>
-     * $rut_sin_dv = \Core\Rut::formatearSinDV(12312312);
-     * echo $rut_sin_dv; //Obtendras 12.312.312-3
+     * $rut_without_dv = \Core\Rut::formatWithoutDV(12312312);
+     * echo $rut_without_dv; //You will get 12.312.312-3
      * </code>
-     * @param  integer  $rut rut sin digito verificador a formatear
+     * @param  integer  $rut rut without verification digit a format
      * @return string   rut formateado
      */
-    public static function formatearSinDV($rut)
+    public static function formatWithoutDV($rut)
     {
-        $dv = self::calcularDigitoVerificador($rut);
+        $dv = self::getVerificationDigit($rut);
         $rut_completo = $rut . '-' . $dv;
-        $rut_formateado = self::formatear($rut_completo);
+        $rut_formateado = self::format($rut_completo);
         return $rut_formateado;
     }
 }

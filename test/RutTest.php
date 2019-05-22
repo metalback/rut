@@ -12,61 +12,61 @@ class RutTest extends TestCase
      * @param  string $rut Rut to validate
      * @return void
      */
-    public function testValidar()
+    public function testValidate()
     {
-        $this->assertTrue(Rut::validar('1-9'));
-        $this->assertTrue(Rut::validar('12.312.312-3'));
-        $this->assertFalse(Rut::validar('15123423-7'));
+        $this->assertTrue(Rut::validate('1-9'));
+        $this->assertTrue(Rut::validate('12.312.312-3'));
+        $this->assertFalse(Rut::validate('15123423-7'));
 
     }
 
-    public function testNumero()
+    public function testNumber()
     {
-        $this->assertEquals(Rut::numero('12.312.312-3'), 12312312);
-        $this->assertEquals(Rut::numero('1-9'), 1);
-        $this->assertEquals(Rut::numero('151234237'), 15123423);
+        $this->assertEquals(Rut::number('12.312.312-3'), 12312312);
+        $this->assertEquals(Rut::number('1-9'), 1);
+        $this->assertEquals(Rut::number('151234237'), 15123423);
     }
 
-    public function testDigitoVerificador()
+    public function testVerificationDigit()
     {
-        $this->assertEquals(Rut::digitoVerificador('12.312.312-3'), 3);
-        $this->assertEquals(Rut::digitoVerificador('1-9'), 9);
-        $this->assertEquals(Rut::digitoVerificador('151234237'), 7);
+        $this->assertEquals(Rut::verificationDigit('12.312.312-3'), 3);
+        $this->assertEquals(Rut::verificationDigit('1-9'), 9);
+        $this->assertEquals(Rut::verificationDigit('151234237'), 7);
     }
 
-    public function testLimpiar()
+    public function testClean()
     {
-        $this->assertEquals(Rut::limpiar('12.312.312-3'), 123123123);
-        $this->assertEquals(Rut::limpiar('1-9'), 19);
-        $this->assertEquals(Rut::limpiar('151234237'), 151234237);
+        $this->assertEquals(Rut::clean('12.312.312-3'), 123123123);
+        $this->assertEquals(Rut::clean('1-9'), 19);
+        $this->assertEquals(Rut::clean('151234237'), 151234237);
     }
 
-    public function testCalcularDigitoVerificador()
+    public function testGetVerificationDigit()
     {
-        $this->assertEquals(Rut::calcularDigitoVerificador('12312312'), 3);
-        $this->assertEquals(Rut::calcularDigitoVerificador(1), 9);
-        $this->assertEquals(Rut::calcularDigitoVerificador('15123423'), 2);
+        $this->assertEquals(Rut::getVerificationDigit('12312312'), 3);
+        $this->assertEquals(Rut::getVerificationDigit(1), 9);
+        $this->assertEquals(Rut::getVerificationDigit('15123423'), 2);
     }
 
-    public function testGenerar()
+    public function testGenerate()
     {
-        $this->assertEquals(count(Rut::generar('', 1)), 1);
-        $generado = Rut::generar('', 1);
-        $this->assertTrue(Rut::validar($generado[0]));
+        $this->assertEquals(count(Rut::generate('', 1)), 1);
+        $generado = Rut::generate('', 1);
+        $this->assertTrue(Rut::validate($generado[0]));
     }
 
-    public function testFormatear()
+    public function testformat()
     {
-        $this->assertEquals(Rut::formatear(123123123), '12.312.312-3');
-        $this->assertEquals(Rut::formatear(19), '1-9');
-        $this->assertEquals(Rut::formatear(151234232), '15.123.423-2');
+        $this->assertEquals(Rut::format(123123123), '12.312.312-3');
+        $this->assertEquals(Rut::format(19), '1-9');
+        $this->assertEquals(Rut::format(151234232), '15.123.423-2');
     }
 
-    public function testFormatearSinDV()
+    public function testformatWithoutDV()
     {
-        $this->assertEquals(Rut::formatearSinDV(12312312), '12.312.312-3');
-        $this->assertEquals(Rut::formatearSinDV(1), '1-9');
-        $this->assertEquals(Rut::formatearSinDV(15123423), '15.123.423-2');
+        $this->assertEquals(Rut::formatWithoutDV(12312312), '12.312.312-3');
+        $this->assertEquals(Rut::formatWithoutDV(1), '1-9');
+        $this->assertEquals(Rut::formatWithoutDV(15123423), '15.123.423-2');
     }
 
 }
